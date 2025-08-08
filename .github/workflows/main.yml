@@ -1,0 +1,46 @@
+name: Build runner image
+
+on:
+  workflow_dispatch:
+  
+permissions:
+  checks: write
+  actions: write
+  contents: read
+env:
+  VISIBILITY: public
+
+jobs:
+  build:
+    runs-on: arc-runnerset-base
+    strategy:
+      matrix:
+        build-number: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Keep runner alive for 10 minutes
+      run: | 
+        sleep 600
+  build2:
+    runs-on: arc-runnerset-base
+    strategy:
+      matrix:
+        build-number: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Keep runner alive for 20 minutes
+      run: | 
+        sleep 1200
+  build3:
+    runs-on: arc-runnerset-base
+    strategy:
+      matrix:
+        build-number: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Keep runner alive for 30 minutes
+      run: | 
+        sleep 1800
