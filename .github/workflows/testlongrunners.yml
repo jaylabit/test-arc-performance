@@ -2,7 +2,12 @@ name: Test long runner builds
 
 on:
   workflow_dispatch:
-  
+    inputs:
+      seconds:
+        description: 'Number of seconds to keep runner alive'
+        required: true
+        default: '93600'
+
 permissions:
   checks: write
   actions: write
@@ -12,25 +17,29 @@ env:
 
 jobs:
   build-with-logs:
+    name: Build with logs - ${{ github.event.inputs.seconds }} seconds
     runs-on: arc-runnerset-base
     strategy:
       matrix:
         build-number: [1]
     steps:
-      - name: Keep runner alive for 26 hours with logs
+      - name: Keep runner alive for ${{ github.event.inputs.seconds }} seconds with logs
         run: |
-          end=$((SECONDS+93600)) # 26 hours = 93600 seconds
+          duration=${{ github.event.inputs.seconds }}
+          end=$((SECONDS+duration))
+          echo "Loop will run for $duration seconds."
           while [ $SECONDS -lt $end ]; do
             echo "Waiting for 30 seconds..."
             sleep 30
             echo "Done waiting. Elapsed: $SECONDS seconds."
           done
   build-without-logs:
+    name: Build without logs - ${{ github.event.inputs.seconds }} seconds
     runs-on: arc-runnerset-base
     strategy:
       matrix:
         build-number: [1]
     steps:
-    - name: Keep runner alive for 26 hours without logs
-      run: | 
-        sleep 93600
+      - name: Keep runner alive for ${{ github.event.inputs.seconds }} seconds without logs
+        run: |
+          sleep ${{ github.event.inputs.seconds }}
