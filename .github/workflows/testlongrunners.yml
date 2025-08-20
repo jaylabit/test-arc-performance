@@ -1,0 +1,36 @@
+name: Test long runner builds
+
+on:
+  workflow_dispatch:
+  
+permissions:
+  checks: write
+  actions: write
+  contents: read
+env:
+  VISIBILITY: public
+
+jobs:
+  build-with-logs:
+    runs-on: arc-runnerset-base
+    strategy:
+      matrix:
+        build-number: [1]
+    steps:
+      - name: Keep runner alive for 26 hours with logs
+        run: |
+          end=$((SECONDS+93600)) # 26 hours = 93600 seconds
+          while [ $SECONDS -lt $end ]; do
+            echo "Waiting for 30 seconds..."
+            sleep 30
+            echo "Done waiting. Elapsed: $SECONDS seconds."
+          done
+  build-without-logs:
+    runs-on: arc-runnerset-base
+    strategy:
+      matrix:
+        build-number: [1]
+    steps:
+    - name: Keep runner alive for 26 hours without logs
+      run: | 
+        sleep 93600

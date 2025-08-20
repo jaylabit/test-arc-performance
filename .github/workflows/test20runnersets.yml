@@ -1,4 +1,4 @@
-name: Build runner image
+name: Test 20 runnerset builds
 
 on:
   workflow_dispatch:
