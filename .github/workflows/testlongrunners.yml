@@ -19,6 +19,7 @@ jobs:
   build-with-logs:
     name: Build with logs - ${{ github.event.inputs.seconds }} seconds
     runs-on: arc-runnerset-base
+    timeout-minutes: 2880 # 48 hours
     strategy:
       matrix:
         build-number: [1]
@@ -36,6 +37,7 @@ jobs:
   build-without-logs:
     name: Build without logs - ${{ github.event.inputs.seconds }} seconds
     runs-on: arc-runnerset-base
+    timeout-minutes: 2880 # 48 hours
     strategy:
       matrix:
         build-number: [1]
