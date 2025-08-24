@@ -1,0 +1,81 @@
+name: Test long runner builds splitted to 5h
+
+on:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: write
+  contents: read
+env:
+  VISIBILITY: public
+
+jobs:
+  build-with-logs:
+    name: Build with logs - 4 steps for 5 hours
+    runs-on: arc-runnerset-base
+    timeout-minutes: 2880 # 48 hours
+    strategy:
+      matrix:
+        build-number: [1]
+    steps:
+      - name: Step 1 - Keep runner alive for 5 hours with logs
+        run: |
+          duration=18000
+          end=$((SECONDS+duration))
+          echo "Loop will run for $duration seconds."
+          while [ $SECONDS -lt $end ]; do
+            echo "Waiting for 30 seconds..."
+            sleep 30
+            echo "Done waiting. Elapsed: $SECONDS seconds."
+          done
+      - name: Step 2 - Keep runner alive for 5 hours with logs
+        run: |
+          duration=18000
+          end=$((SECONDS+duration))
+          echo "Loop will run for $duration seconds."
+          while [ $SECONDS -lt $end ]; do
+            echo "Waiting for 30 seconds..."
+            sleep 30
+            echo "Done waiting. Elapsed: $SECONDS seconds."
+          done
+      - name: Step 3 - Keep runner alive for 5 hours with logs
+        run: |
+          duration=18000
+          end=$((SECONDS+duration))
+          echo "Loop will run for $duration seconds."
+          while [ $SECONDS -lt $end ]; do
+            echo "Waiting for 30 seconds..."
+            sleep 30
+            echo "Done waiting. Elapsed: $SECONDS seconds."
+          done
+      - name: Step 4 - Keep runner alive for 5 hours with logs
+        run: |
+          duration=18000
+          end=$((SECONDS+duration))
+          echo "Loop will run for $duration seconds."
+          while [ $SECONDS -lt $end ]; do
+            echo "Waiting for 30 seconds..."
+            sleep 30
+            echo "Done waiting. Elapsed: $SECONDS seconds."
+          done
+  build-without-logs:
+    name: Build without logs - ${{ github.event.inputs.seconds }} seconds
+    runs-on: arc-runnerset-base
+    timeout-minutes: 2880 # 48 hours
+    strategy:
+      matrix:
+        build-number: [1]
+    steps:
+      - name: Step 1 - Keep runner alive for 5 hours without logs
+        run: |
+          sleep 18000
+      - name: Step 2 - Keep runner alive for 5 hours without logs
+        run: |
+          sleep 18000
+      - name: Step 3 - Keep runner alive for 5 hours without logs
+        run: |
+          sleep 18000
+      - name: Step 4 - Keep runner alive for 5 hours without logs
+        run: |
+          sleep 18000
