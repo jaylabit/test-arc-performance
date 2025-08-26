@@ -1,0 +1,56 @@
+name: Test long runner multijob with online status
+
+on:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: write
+  contents: read
+env:
+  VISIBILITY: public
+
+jobs:
+  build-with-logs:
+    name: Build with logs and status check - 7 hours
+    runs-on: arc-runnerset-base
+    timeout-minutes: 420 # 7 hours
+    steps:
+      - name: Step 1 - Keep runner alive for 7 hours with logs
+        env:
+          GH_TOKEN: ${{ secrets.LIST_RUNNERS_TOKEN }}
+        run: |
+          duration=24000
+          end=$((SECONDS+duration))
+          echo "Loop will run for $duration seconds."
+          while [ $SECONDS -lt $end ]; do
+            echo "Waiting for 60 seconds..."
+            sleep 60
+            echo "Done waiting. Elapsed: $SECONDS seconds."
+            gh api \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /orgs/jaylabit/actions/runners
+          done
+  build-with-logs2:
+    name: Build with logs and status check - 7 hours
+    runs-on: arc-runnerset-base
+    needs: build-with-logs
+    timeout-minutes: 420 # 7 hours
+    steps:
+      - name: Step 1 - Keep runner alive for 7 hours with logs
+        env:
+          GH_TOKEN: ${{ secrets.LIST_RUNNERS_TOKEN }}
+        run: |
+          duration=24000
+          end=$((SECONDS+duration))
+          echo "Loop will run for $duration seconds."
+          while [ $SECONDS -lt $end ]; do
+            echo "Waiting for 60 seconds..."
+            sleep 60
+            echo "Done waiting. Elapsed: $SECONDS seconds."
+            gh api \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /orgs/jaylabit/actions/runners
+          done
