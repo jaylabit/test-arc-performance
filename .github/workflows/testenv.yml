@@ -1,0 +1,21 @@
+name: simple test of setting default variable value
+
+on:
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: write
+  contents: read
+env:
+  test: public
+
+jobs:
+  build-with-logs:
+    name: simple test of setting default variable value
+    runs-on: arc-runnerset-base
+    steps:
+      - name: test empty env behavior
+        run: |
+          echo "TEST_OUTPUT_FILE=${{ env.TEST_OUTPUT_FILE }}"
+          printf '{"%s": "%s"}\n' 'buildCodeStartTime' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ${{ env.TEST_OUTPUT_FILE || '/dev/null' }}
